@@ -1,81 +1,50 @@
 <template>
-    <div class="p-6 max-w-6xl mx-auto">
-        <!-- ── Header ── -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-darkberry">ส่งออกรายงาน</h1>
-            <p class="text-sm text-gray-500 mt-1">
-                กรองช่วงวันที่ แล้วส่งออกเป็น Excel
-                เพื่อคำนวณเงินหรือสำรองข้อมูล
-            </p>
+    <div class="page">
+        <div class="page-head">
+            <div class="page-head__main">
+                <span class="page-icon page-icon--export">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+                               a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="page-title">ส่งออกรายงาน</h1>
+                    <p class="page-sub">
+                        กรองช่วงวันที่ แล้วส่งออกเป็น CSV เพื่อคำนวณเงินหรือสำรองข้อมูล
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- ── Filter card ── -->
-        <div class="bg-white rounded-2xl shadow-sm p-5 mb-5">
-            <h2
-                class="text-sm font-semibold text-darkberry mb-4 flex items-center gap-2"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z
-                   M3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6z
-                   M14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
-                    />
-                </svg>
-                เลือกช่วงวันที่
-            </h2>
+        <div class="card toolbar-card">
+            <div class="filter-bar">
+                <DateRangePicker
+                    v-model="dateRange"
+                    label="ช่วงวันที่"
+                    class="filter-field filter-field--date"
+                />
 
-            <div class="flex flex-wrap items-end gap-4">
-                <div class="flex-1 min-w-[160px]">
-                    <label class="block text-xs font-medium text-gray-500 mb-1"
-                        >วันที่เริ่มต้น</label
-                    >
-                    <input
-                        v-model="dateFrom"
-                        type="date"
-                        class="w-full px-3 py-2.5 bg-yogurt border border-gray-200 rounded-xl text-sm text-darkberry focus:outline-none focus:ring-2 focus:ring-blueberry focus:border-transparent transition"
-                    />
-                </div>
-                <div class="flex-1 min-w-[160px]">
-                    <label class="block text-xs font-medium text-gray-500 mb-1"
-                        >วันที่สิ้นสุด</label
-                    >
-                    <input
-                        v-model="dateTo"
-                        type="date"
-                        class="w-full px-3 py-2.5 bg-yogurt border border-gray-200 rounded-xl text-sm text-darkberry focus:outline-none focus:ring-2 focus:ring-blueberry focus:border-transparent transition"
-                    />
-                </div>
-
-                <!-- Quick range buttons -->
-                <div class="flex gap-2 flex-wrap">
-                    <button
-                        v-for="preset in presets"
-                        :key="preset.label"
-                        @click="applyPreset(preset)"
-                        class="px-3 py-2.5 text-xs font-medium border border-gray-200 rounded-xl text-gray-600 hover:border-blueberry hover:text-blueberry hover:bg-blue-50 transition"
-                    >
-                        {{ preset.label }}
-                    </button>
-                </div>
-
-                <!-- Load button -->
                 <button
-                    @click="loadData"
+                    type="button"
+                    class="btn btn-primary load-btn"
                     :disabled="isLoading || !dateFrom || !dateTo"
-                    class="flex items-center gap-2 px-5 py-2.5 bg-blueberry text-white text-sm font-semibold rounded-xl hover:bg-darkberry disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                    @click="loadData"
                 >
                     <svg
                         v-if="isLoading"
-                        class="w-4 h-4 animate-spin"
+                        class="animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -97,7 +66,6 @@
                     <svg
                         v-else
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -107,21 +75,20 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1
-                     m-4-4l-4 4m0 0l-4-4m4 4V4"
+                               m-4-4l-4 4m0 0l-4-4m4 4V4"
                         />
                     </svg>
                     {{ isLoading ? "กำลังโหลด…" : "โหลดข้อมูล" }}
                 </button>
             </div>
 
-            <!-- Error -->
             <div
                 v-if="loadError"
-                class="mt-4 flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600"
+                class="alert alert--error load-error"
+                role="alert"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -139,43 +106,38 @@
 
         <!-- ── Results (shown after loading) ── -->
         <template v-if="records.length > 0">
-            <!-- Stat chips -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
-                <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
-                    <p class="text-2xl font-bold text-darkberry">
-                        {{ records.length }}
-                    </p>
-                    <p class="text-xs text-gray-400 mt-0.5">เคสทั้งหมด</p>
+            <div class="stat-grid stat-grid--4">
+                <div class="stat">
+                    <p class="stat__value">{{ records.length }}</p>
+                    <p class="stat__label">เคสทั้งหมด</p>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
-                    <p class="text-2xl font-bold text-darkberry">
-                        {{ uniqueTherapists }}
-                    </p>
-                    <p class="text-xs text-gray-400 mt-0.5">ผู้ให้บริการ</p>
+                <div class="stat">
+                    <p class="stat__value">{{ uniqueTherapists }}</p>
+                    <p class="stat__label">ผู้ให้บริการ</p>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
-                    <p class="text-lg font-bold text-darkberry">
+                <div class="stat stat--primary">
+                    <p class="stat__value stat__value--money">
                         {{ formatCurrency(totalPayout) }}
                     </p>
-                    <p class="text-xs text-gray-400 mt-0.5">ค่าตอบแทนรวม (฿)</p>
+                    <p class="stat__label">ค่าตอบแทนรวม (฿)</p>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm p-4 text-center">
-                    <p class="text-lg font-bold text-darkberry">
+                <div class="stat">
+                    <p class="stat__value stat__value--money">
                         {{ formatCurrency(totalRevenue) }}
                     </p>
-                    <p class="text-xs text-gray-400 mt-0.5">รายได้รวม (฿)</p>
+                    <p class="stat__label">รายได้รวม (฿)</p>
                 </div>
             </div>
 
             <!-- ── Export buttons ── -->
-            <div class="flex flex-wrap gap-3 mb-5">
+            <div class="export-actions">
                 <button
+                    type="button"
+                    class="btn btn-ghost"
                     @click="exportRawData"
-                    class="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-darkberry text-sm font-semibold rounded-xl hover:border-blueberry hover:text-blueberry hover:bg-blue-50 transition shadow-sm"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -185,19 +147,19 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
-                     a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                               a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         />
                     </svg>
                     ส่งออก CSV — ข้อมูลดิบ ({{ records.length }} แถว)
                 </button>
 
                 <button
+                    type="button"
+                    class="btn btn-export"
                     @click="exportSummary"
-                    class="flex items-center gap-2 px-5 py-2.5 bg-blueberry text-white text-sm font-semibold rounded-xl hover:bg-darkberry transition shadow-sm"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -207,7 +169,7 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
-                     a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                               a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         />
                     </svg>
                     ส่งออก CSV — สรุปรายเดือน
@@ -215,152 +177,98 @@
             </div>
 
             <!-- ── Monthly Summary Table ── -->
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div
-                    class="px-5 py-4 border-b border-gray-100 flex items-center justify-between"
-                >
-                    <h3 class="font-semibold text-darkberry text-sm">
+            <div class="card table-card">
+                <div class="card__head">
+                    <h3 class="card__title">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                            />
+                        </svg>
                         สรุปรายเดือน แยกตามผู้ให้บริการ
                     </h3>
-                    <span class="text-xs text-gray-400"
-                        >{{ summary.length }} รายการ</span
-                    >
+                    <span class="card__meta">{{ summary.length }} รายการ</span>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                <div class="table-scroll">
+                    <table class="data-table">
                         <thead>
-                            <tr class="bg-gray-50">
-                                <th
-                                    class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    เดือน
-                                </th>
-                                <th
-                                    class="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    ผู้ให้บริการ
-                                </th>
-                                <th
-                                    class="px-4 py-3 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    จำนวนเคส
-                                </th>
-                                <th
-                                    class="px-4 py-3 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    ค่าบริการรวม (฿)
-                                </th>
-                                <th
-                                    class="px-4 py-3 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    ค่าตอบแทน (฿)
-                                </th>
+                            <tr>
+                                <th>เดือน</th>
+                                <th>ผู้ให้บริการ</th>
+                                <th class="center">จำนวนเคส</th>
+                                <th class="num">ค่าบริการรวม (฿)</th>
+                                <th class="num">ค่าตอบแทน (฿)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Month group header rows -->
                             <template
-                                v-for="(group, gIdx) in summaryByMonth"
+                                v-for="group in summaryByMonth"
                                 :key="group.month"
                             >
-                                <!-- Month label row -->
-                                <tr class="bg-yogurt">
-                                    <td
-                                        colspan="5"
-                                        class="px-4 py-2 text-xs font-bold text-blueberry uppercase tracking-wider"
-                                    >
+                                <tr class="month-row">
+                                    <td colspan="5">
                                         {{ formatMonthYear(group.month) }}
                                         &nbsp;·&nbsp;
                                         {{ group.rows.length }} ผู้ให้บริการ
                                         &nbsp;·&nbsp; {{ group.totalCases }} เคส
                                     </td>
                                 </tr>
-                                <!-- Per-therapist rows -->
                                 <tr
-                                    v-for="(row, rIdx) in group.rows"
+                                    v-for="row in group.rows"
                                     :key="row.therapist"
-                                    class="border-t border-gray-50 hover:bg-gray-50 transition-colors"
                                 >
-                                    <td class="px-4 py-3 text-gray-400 text-xs">
-                                        —
-                                    </td>
-                                    <td
-                                        class="px-4 py-3 font-medium text-darkberry whitespace-nowrap"
-                                    >
+                                    <td class="cell-faint">—</td>
+                                    <td class="cell-strong">
                                         {{ row.therapist }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span
-                                            class="inline-block px-2 py-0.5 bg-blue-50 text-blueberry text-xs font-bold rounded-full"
-                                        >
+                                    <td class="center">
+                                        <span class="chip chip--soft">
                                             {{ row.total_cases }}
                                         </span>
                                     </td>
-                                    <td
-                                        class="px-4 py-3 text-right text-gray-600 whitespace-nowrap tabular-nums"
-                                    >
+                                    <td class="num cell-muted">
                                         {{ formatCurrency(row.total_revenue) }}
                                     </td>
-                                    <td
-                                        class="px-4 py-3 text-right font-semibold text-darkberry whitespace-nowrap tabular-nums"
-                                    >
+                                    <td class="num cell-strong">
                                         {{ formatCurrency(row.total_payout) }}
                                     </td>
                                 </tr>
-                                <!-- Sub-total row -->
-                                <tr
-                                    class="border-t border-gray-200 bg-blue-50/40"
-                                >
-                                    <td class="px-4 py-2.5"></td>
-                                    <td
-                                        class="px-4 py-2.5 text-xs font-bold text-blueberry"
-                                    >
+                                <tr class="subtotal-row">
+                                    <td></td>
+                                    <td>
                                         รวม {{ formatMonthYear(group.month) }}
                                     </td>
-                                    <td
-                                        class="px-4 py-2.5 text-center text-xs font-bold text-blueberry"
-                                    >
+                                    <td class="center">
                                         {{ group.totalCases }}
                                     </td>
-                                    <td
-                                        class="px-4 py-2.5 text-right text-xs font-bold text-blueberry tabular-nums whitespace-nowrap"
-                                    >
+                                    <td class="num">
                                         {{ formatCurrency(group.totalRevenue) }}
                                     </td>
-                                    <td
-                                        class="px-4 py-2.5 text-right text-xs font-bold text-blueberry tabular-nums whitespace-nowrap"
-                                    >
+                                    <td class="num">
                                         {{ formatCurrency(group.totalPayout) }}
                                     </td>
                                 </tr>
                             </template>
                         </tbody>
 
-                        <!-- Grand total -->
                         <tfoot>
-                            <tr
-                                class="border-t-2 border-blueberry/20 bg-blueberry/5"
-                            >
-                                <td class="px-4 py-3"></td>
-                                <td
-                                    class="px-4 py-3 text-sm font-bold text-darkberry"
-                                >
-                                    รวมทั้งหมด
-                                </td>
-                                <td
-                                    class="px-4 py-3 text-center text-sm font-bold text-darkberry"
-                                >
-                                    {{ records.length }}
-                                </td>
-                                <td
-                                    class="px-4 py-3 text-right text-sm font-bold text-darkberry tabular-nums whitespace-nowrap"
-                                >
+                            <tr>
+                                <td></td>
+                                <td>รวมทั้งหมด</td>
+                                <td class="center">{{ records.length }}</td>
+                                <td class="num">
                                     {{ formatCurrency(totalRevenue) }}
                                 </td>
-                                <td
-                                    class="px-4 py-3 text-right text-sm font-bold text-darkberry tabular-nums whitespace-nowrap"
-                                >
+                                <td class="num">
                                     {{ formatCurrency(totalPayout) }}
                                 </td>
                             </tr>
@@ -373,28 +281,29 @@
         <!-- ── Empty state (after load attempt with 0 results) ── -->
         <div
             v-else-if="hasLoaded && records.length === 0"
-            class="bg-white rounded-2xl shadow-sm p-16 text-center"
+            class="card empty-state"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-14 h-14 mx-auto mb-4 text-gray-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
-                 a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-            </svg>
-            <p class="text-gray-400 font-medium">
+            <span class="empty-state__icon">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+                           a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                </svg>
+            </span>
+            <p class="empty-state__title">
                 ไม่พบข้อมูลในช่วงวันที่ที่เลือก
             </p>
-            <p class="text-xs text-gray-300 mt-1">
-                ลองเปลี่ยนช่วงวันที่แล้วโหลดใหม่
+            <p class="empty-state__text">
+                ลองเปลี่ยนช่วงวันที่แล้วโหลดใหม่อีกครั้ง
             </p>
         </div>
 
@@ -402,15 +311,17 @@
         <Transition name="toast">
             <div
                 v-if="toast.show"
-                class="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium max-w-sm"
+                class="toast"
                 :class="
-                    toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+                    toast.type === 'success'
+                        ? 'toast--success'
+                        : 'toast--error'
                 "
+                role="status"
             >
                 <svg
                     v-if="toast.type === 'success'"
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -425,7 +336,6 @@
                 <svg
                     v-else
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -446,7 +356,9 @@
 <script setup>
 import { ref, computed } from "vue";
 import { supabase } from "@/lib/supabase";
-import { formatDate, formatCurrency, formatMonthYear } from "@/utils/format";
+import { formatCurrency, formatMonthYear } from "@/utils/format";
+import { startOfMonthISO, todayISO } from "@/utils/dateRange";
+import DateRangePicker from "@/components/DateRangePicker.vue";
 
 // ── State ────────────────────────────────────────────────────────────────────
 const records = ref([]);
@@ -456,58 +368,16 @@ const loadError = ref("");
 const toast = ref({ show: false, type: "success", message: "" });
 
 // Default range: first day of current month → today
-const today = new Date();
-const dateFrom = ref(
-    `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-01`,
-);
-const dateTo = ref(today.toISOString().split("T")[0]);
+const dateFrom = ref(startOfMonthISO());
+const dateTo = ref(todayISO());
 
-// ── Date presets ─────────────────────────────────────────────────────────────
-const presets = [
-    { label: "เดือนนี้", fn: () => thisMonth() },
-    { label: "เดือนที่แล้ว", fn: () => lastMonth() },
-    { label: "3 เดือน", fn: () => lastNMonths(3) },
-    { label: "ปีนี้", fn: () => thisYear() },
-];
-
-function thisMonth() {
-    const d = new Date();
-    return {
-        from: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-01`,
-        to: d.toISOString().split("T")[0],
-    };
-}
-function lastMonth() {
-    const d = new Date();
-    d.setDate(1);
-    d.setMonth(d.getMonth() - 1);
-    const y = d.getFullYear();
-    const m = d.getMonth() + 1;
-    const lastDay = new Date(y, m, 0).getDate();
-    return {
-        from: `${y}-${String(m).padStart(2, "0")}-01`,
-        to: `${y}-${String(m).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`,
-    };
-}
-function lastNMonths(n) {
-    const end = new Date();
-    const start = new Date();
-    start.setMonth(start.getMonth() - n + 1);
-    start.setDate(1);
-    return {
-        from: start.toISOString().split("T")[0],
-        to: end.toISOString().split("T")[0],
-    };
-}
-function thisYear() {
-    const y = new Date().getFullYear();
-    return { from: `${y}-01-01`, to: new Date().toISOString().split("T")[0] };
-}
-function applyPreset(preset) {
-    const range = preset.fn();
-    dateFrom.value = range.from;
-    dateTo.value = range.to;
-}
+const dateRange = computed({
+    get: () => ({ from: dateFrom.value, to: dateTo.value }),
+    set: (range) => {
+        dateFrom.value = range?.from || "";
+        dateTo.value = range?.to || "";
+    },
+});
 
 // ── Data loading ──────────────────────────────────────────────────────────────
 async function loadData() {
@@ -751,3 +621,54 @@ function showToast(type, message) {
     }, 4000);
 }
 </script>
+
+<style scoped>
+.filter-field--date {
+    width: 280px;
+}
+
+.load-btn {
+    margin-left: auto;
+}
+
+.load-error {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.load-error svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.stat__value--money {
+    font-size: 17px;
+    letter-spacing: -0.3px;
+}
+
+.export-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+@media (max-width: 700px) {
+    .filter-field--date {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .load-btn {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .export-actions .btn {
+        flex: 1 1 100%;
+    }
+}
+</style>

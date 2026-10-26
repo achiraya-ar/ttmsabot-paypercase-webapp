@@ -2,14 +2,18 @@
 
 # 📄 agents.md: PayPerCase WebApp Development Plan (Vue.js Edition)
 
-## 🎨 UI & Theme Specification (The Blueberry & Yogurt Palette)
-การออกแบบจะใช้ **Tailwind CSS** ร่วมกับ **Vue 3 (Composition API)** โดยยึดหลักสีดังนี้:
-* **Main Background:** `#F4F7FA` (Yogurt Base) - พื้นหลังหลัก
-* **Surface / Cards:** `#FFFFFF` (Cream Cheese) - พื้นหลังตารางและส่วนกรอกข้อมูล
-* **Primary Action:** `#3F51B5` (Blueberry Jam) - ปุ่มหลัก (Import/Export/Login)
-* **Secondary Accent:** `#9FA8DA` (Whipped Berry) - แถบ Menu รอง / Hover State
-* **Highlight / Alert:** `#FFAB91` (Crust Crumbs) - การแจ้งเตือนหรือจุดที่ต้องระวัง
-* **Primary Text:** `#1A237E` (Dark Berry) - ตัวอักษรหลัก (Tahoma Font)
+## 🎨 UI & Theme Specification (PayPerCase Violet & Peach Palette)
+การออกแบบใช้ **Tailwind CSS** ร่วมกับ **Vue 3 (Composition API)** และยึด design token
+ชุดเดียวกับโปรแกรม **PayPerCase** (Desktop) เพื่อให้ทั้งสองโปรแกรมดูเป็นผลิตภัณฑ์เดียวกัน:
+* **Main Background:** `#F7F5FC` (Violet Mist) - พื้นหลังหลัก
+* **Surface / Cards:** `#FFFFFF` - พื้นหลังตารางและส่วนกรอกข้อมูล
+* **Primary Action:** `#4C1D95` (PayPerCase Violet) - ปุ่มหลัก (Import/Export/Login)
+* **Primary Soft:** `#EDE9FE` / `#F5F1FF` - พื้นหลังรอง, hover state, nav pill
+* **Accent:** `#FFAB91` (Peach) - ไฮไลต์, งานส่งออก, จุดที่ต้องระวัง
+* **Primary Text:** `#1F1633` (Deep Berry) - ตัวอักษรหลัก
+* **Font:** `Inter` + `IBM Plex Sans Thai` (fallback Tahoma) - ขนาดฐาน 13px
+* **Shape:** ปุ่มเป็น pill (`9999px`), การ์ดมุมโค้ง 16px, เงานุ่มโทนม่วง
+* **Icons / Brand:** ใช้ `public/app-icon.svg` เดียวกับโปรแกรม Desktop
 
 ---
 
@@ -46,9 +50,10 @@
 ### 5. Frontend Architect Agent (The Layout Master)
 * **Framework:** Vue 3 + Tailwind CSS
 * **Responsibility:**
-    * สร้าง **Main Layout** แบบ **Fixed Sidebar** สีขาว (Cream Cheese) และ **Content Area** สีฟ้าอ่อน (Yogurt Base)
-    * คุม Font ทั้งระบบเป็น **Tahoma** และสีตัวอักษรเป็น **Dark Berry** เพื่อให้อ่านง่าย
-    * จัดการหน้าจอให้เป็น **Responsive Design** รองรับทั้งจอคอมพิวเตอร์และ Tablet
+    * สร้าง **Main Layout** แบบ **Top Bar** (brand + nav pill + user chip) ให้ตรงกับ `AppMenuBar` ของโปรแกรม Desktop และมี **Content Area** พื้นหลังม่วงอ่อนพร้อม gradient นุ่ม ๆ
+    * คุม Font ทั้งระบบเป็น **Inter + IBM Plex Sans Thai** ขนาด 13px และสีตัวอักษรเป็น **Deep Berry** เพื่อให้อ่านง่าย
+    * ใช้ชุดคลาสกลางใน `src/style.css` (`btn`, `card`, `data-table`, `field-input`, `modal`) เพื่อให้ UI สอดคล้องกันทุกหน้า
+    * จัดการหน้าจอให้เป็น **Responsive Design** รองรับทั้งจอคอมพิวเตอร์, Tablet และมือถือ
 
 ---
 

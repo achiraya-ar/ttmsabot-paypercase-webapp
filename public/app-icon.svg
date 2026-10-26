@@ -1,0 +1,55 @@
+<svg width="512px" height="512px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- ไล่เฉดสีพื้นหลัง (Background Gradient) -->
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#311055;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#1E1B4B;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#4C1D95;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- เส้นเชื่อม: โทนสีน้ำเงิน-อินดิโก แบบมีมิติ -->
+        <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#9FA8DA;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#7986CB;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#303F9F;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- สีวงกลมโทนพีช-ส้มละมุน -->
+        <linearGradient id="circleFaceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- เงาหลักสำหรับภาพรวม -->
+        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="12" />
+            <feOffset dx="16" dy="16" result="offsetblur" />
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3" />
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+
+        <!-- เงาและไฮไลท์พิเศษสำหรับเพิ่มมิติความนูนให้เส้น -->
+        <filter id="lineGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="-2" dy="-2" stdDeviation="2" flood-color="#C5CAE9" flood-opacity="0.6" />
+        </filter>
+    </defs>
+
+    <!-- พื้นหลังแบบไล่เฉดสี -->
+    <rect width="100%" height="100%" fill="url(#bgGradient)" rx="64" />
+
+    <g filter="url(#softShadow)">
+        <!-- เส้นเชื่อมแบบมีมิติ (เพิ่มไฮไลท์ขอบบนซ้ายให้ดูนูนลอย) -->
+        <line x1="384" y1="128" x2="128" y2="384" stroke="url(#mainGradient)" stroke-width="56" stroke-linecap="round" filter="url(#lineGlow)" />
+
+        <!-- วงกลมที่ 1 -->
+        <circle cx="160" cy="160" r="80" fill="url(#circleFaceGradient)" />
+
+        <!-- วงกลมที่ 2 -->
+        <circle cx="352" cy="352" r="80" fill="url(#circleFaceGradient)" />
+    </g>
+</svg>

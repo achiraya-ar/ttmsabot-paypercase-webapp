@@ -1,58 +1,34 @@
 <template>
-  <svg
-    :width="size"
-    :height="size"
-    viewBox="0 0 64 64"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    v-bind="$attrs"
-  >
-    <defs>
-      <linearGradient id="logoMainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#7986CB;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#3F51B5;stop-opacity:1" />
-      </linearGradient>
-
-      <linearGradient id="logoCircleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:1" />
-      </linearGradient>
-
-      <filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-        <feOffset dx="3" dy="3" result="offsetblur" />
-        <feComponentTransfer>
-          <feFuncA type="linear" slope="0.15" />
-        </feComponentTransfer>
-        <feMerge>
-          <feMergeNode />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-
-    <g filter="url(#logoShadow)">
-      <line
-        x1="48" y1="16" x2="16" y2="48"
-        stroke="url(#logoMainGradient)"
-        stroke-width="7"
-        stroke-linecap="round"
-      />
-
-      <circle cx="20" cy="20" r="10" fill="url(#logoCircleGradient)" />
-      <circle cx="20" cy="20" r="3"  fill="white" fill-opacity="0.4" />
-
-      <circle cx="44" cy="44" r="10" fill="url(#logoCircleGradient)" />
-      <circle cx="44" cy="44" r="3"  fill="white" fill-opacity="0.4" />
-    </g>
-  </svg>
+    <img
+        :src="iconSrc"
+        :width="size"
+        :height="size"
+        alt="PayPerCase"
+        class="ppc-logo"
+        v-bind="$attrs"
+    />
 </template>
 
 <script setup>
+import { computed } from "vue";
+
+defineOptions({ inheritAttrs: false });
+
 defineProps({
-  size: {
-    type: [String, Number],
-    default: 40,
-  },
-})
+    size: {
+        type: [String, Number],
+        default: 40,
+    },
+});
+
+const iconSrc = computed(() => `${import.meta.env.BASE_URL}app-icon.svg`);
 </script>
+
+<style scoped>
+.ppc-logo {
+    display: block;
+    flex-shrink: 0;
+    border-radius: 9px;
+    object-fit: contain;
+}
+</style>
